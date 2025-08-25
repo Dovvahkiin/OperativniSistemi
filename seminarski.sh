@@ -2,7 +2,7 @@
 # Ova skripta je napravljena za Debian 13 verziju.
 # Pokreće se sa: sudo bash setup.sh
 
-# Provera privilegija
+# Provera privilegija da li je skripta pokrenuta kao superuser ili regular user
 if [[ $EUID -ne 0 ]]; then
    echo "Pokreni skriptu kao root (sudo)." 
    exit 1
@@ -10,7 +10,7 @@ fi
 
 # Početak aplikacije
 
-echo "==== Ažuriranje paketa ===="
+echo "==== Ažuriranje svih paketa ===="
 apt update && apt -y upgrade && apt -y dist-upgrade
 
 echo "==== Dodavanje repozitorijuma (contrib i non-free) ===="
@@ -32,4 +32,4 @@ echo "==== Čišćenje sistema ===="
 apt -y autoremove
 apt -y autoclean
 
-echo "==== GOTOVO! Restartuj računar za ulazak u KDE Plasma. ===="
+echo "==== GOTOVO! Molimo restartujte računar da bi se promene primenile. ===="
