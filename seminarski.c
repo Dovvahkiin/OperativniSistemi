@@ -71,7 +71,7 @@ int main()
         scanf(" %d", &generalniIzbor);
         int c;
         while ((c = getchar()) != '\n' && c != EOF)
-            ;
+            ; // getchar cita po jedan karakter, petlja ide dok ne dodje do novog reda "\n" ili EOF.
 
         switch (generalniIzbor)
         {
