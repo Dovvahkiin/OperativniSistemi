@@ -6,7 +6,7 @@
 struct bashKomande
 {
     char tipKomande[5];
-    char pomocniTekst[255];
+    char komanda[255];
 } bash;
 
 void ucitavanjeIzboraTipova()
@@ -38,56 +38,77 @@ char *crvenaStampa(const char *tekst) // funkcija za stampu u crvenoj boji
     return crveniTekst;
 }
 
+void unosUserKomandi(FILE *imeFajla)
+{
+    printf("Unesite vasu komandu bez prefixa (sudo):\n");
+    fgets(bash.komanda, sizeof(bash.komanda), stdin);
+    printf("Vasa komanda: %s", bash.komanda);
+    fprintf(imeFajla, "%s", bash.komanda);
+}
+
+void unosSuperUserKomandi(FILE *imeFajla)
+{
+    strcpy(bash.tipKomande, "sudo");
+    printf("%s", bash.tipKomande);
+    printf("Unesite vasu komandu bez prefixa (sudo):\n");
+    fgets(bash.komanda, sizeof(bash.komanda), stdin);
+    printf("Vasa komanda: %s %s", bash.tipKomande, bash.komanda);
+    fprintf(imeFajla, "%s %s", bash.tipKomande, bash.komanda);
+}
+
 int main()
 {
-    struct bashKomande bash;
     int izborTipa, generalniIzbor;
     bool stanjeMenija = true;
-    bool stanjeMenijaTip = true;
+    bool stanjeMenijaTip = false;
 
     while (stanjeMenija)
     {
-        while (stanjeMenijaTip)
+        stanjeMenija = true;
+        ucitavanjeMenija();
+        printf("\nVas izbor: ");
+        scanf(" %d", &generalniIzbor);
+        switch (generalniIzbor)
         {
-            ucitavanjeMenija();
-            printf("\nVas izbor: ");
-            scanf("%d", &generalniIzbor);
-            switch (generalniIzbor)
+        case 1:
+        {
+            FILE *fajlKomandi;
+            fajlKomandi = fopen("komande.txt", "a+");
+            if (fajlKomandi == NULL)
             {
-            case 1:
-            {
-                FILE *fajlKomandi;
-                fajlKomandi = fopen("komande.txt", "a+");
-                if (fajlKomandi == NULL)
+                system("cls");
+                char *greska = crvenaStampa("\nGreska pri otvaranju datoteke.\nPritisnite taster da bi se vratili na pocetak\n");
+                if (greska != NULL)
                 {
-                    system("cls");
-                    char *greska = crvenaStampa("\nGreska pri otvaranju datoteke.\nPritisnite taster da bi se vratili na pocetak\n");
-                    if (greska != NULL)
-                    {
-                        printf("%s", greska);
-                        free(greska);
-                    }
+                    printf("%s", greska);
+                    free(greska);
                 }
-                else
+            }
+            else
+            {
+                stanjeMenijaTip = true;
+                while (stanjeMenijaTip)
                 {
                     ucitavanjeIzboraTipova();
-                    printf("\Vas izbor: ");
-                    scanf("%d", &izborTipa);
+                    printf("\nVas izbor: ");
+                    scanf(" %d", &izborTipa);
 
                     switch (izborTipa)
                     {
                     case 1:
                     {
-                        char *sudo = "sudo ";
-                        printf("%s", sudo);
-                        getchar();
+                        unosSuperUserKomandi(fajlKomandi);
+                        fclose(fajlKomandi);
+                        stanjeMenijaTip = false;
+                        izborTipa = 0;
                         break;
                     }
                     case 2:
                     {
-                        char *sudo = "";
-                        printf("%s", &sudo);
-                        getchar();
+                        unosUserKomandi(fajlKomandi);
+                        fclose(fajlKomandi);
+                        stanjeMenijaTip = false;
+                        izborTipa = 0;
                         break;
                     }
                     default:
@@ -96,9 +117,16 @@ int main()
                     }
                     }
                 }
-                break;
             }
-            }
+            break;
+        }
+        default:
+        {
+            printf("Uneli ste pogresan broj");
+            getchar();
+
+            break;
+        }
         }
     }
 }
