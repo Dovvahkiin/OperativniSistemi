@@ -8,10 +8,17 @@ struct bashKomande
     char pomocniTekst[255];
 } bash;
 
-main()
+void ucitavanjeMenija()
+{
+    printf("\n\nDobrodosli\n---------------------\n");
+    printf("Izaberite sta zelite da uradite:\n");
+    printf("1. Dodavanje nove komande\n2. Ispisivanje celokupne skripte\n\n");
+}
+
+int main()
 {
     struct bashKomande bash;
     int izborTipa, generalniIzbor;
     system("color 2");
-    printf("Hello World");
+    ucitavanjeMenija();
 }
