@@ -94,6 +94,7 @@ int main()
                 stanjeMenijaTip = true;
                 while (stanjeMenijaTip)
                 {
+                    system("cls");
                     ucitavanjeIzboraTipova();
                     printf("\nVas izbor: ");
                     scanf(" %d", &izborTipa);
@@ -123,6 +124,7 @@ int main()
                     }
                 }
                 fclose(unosniFajl);
+                system("cls");
             }
             break;
         }
@@ -148,7 +150,6 @@ int main()
             getchar();
             fclose(fajlZaCitanje);
             system("cls");
-            ucitavanjeMenija();
             break;
         }
         case 3:
@@ -160,6 +161,7 @@ int main()
         default:
         {
             printf("Unos nije prihvatljiv, pokusajte ponovo.");
+            system("cls");
             break;
         }
         }
