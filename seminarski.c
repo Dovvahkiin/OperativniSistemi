@@ -19,7 +19,7 @@ void ucitavanjeMenija() // funkcija za ucitavanje menija
 {
     printf("\n\nDobrodosli\n---------------------\n");
     printf("Izaberite sta zelite da uradite:\n");
-    printf("1. Dodavanje nove komande\n2. Ispisivanje celokupne skripte\n\n");
+    printf("1. Dodavanje nove komande\n2. Ispisivanje celokupne skripte\n3. Izlaz\n\n");
 }
 
 char *crvenaStampa(const char *tekst) // funkcija za stampu u crvenoj boji
@@ -40,17 +40,17 @@ char *crvenaStampa(const char *tekst) // funkcija za stampu u crvenoj boji
 
 void unosUserKomandi(FILE *imeFajla)
 {
-    printf("Unesite vasu komandu bez prefixa (sudo):\n");
+    printf("Unesite vasu komandu: \n");
     fgets(bash.komanda, sizeof(bash.komanda), stdin);
     printf("Vasa komanda: %s", bash.komanda);
-    fprintf(imeFajla, "%s", bash.komanda);
+    fprintf(imeFajla, "%s\n", bash.komanda);
 }
 
 void unosSuperUserKomandi(FILE *imeFajla)
 {
     strcpy(bash.tipKomande, "sudo");
     printf("%s", bash.tipKomande);
-    printf("Unesite vasu komandu bez prefixa (sudo):\n");
+    printf("Unesite vasu komandu bez prefixa (sudo): \n");
     fgets(bash.komanda, sizeof(bash.komanda), stdin);
     printf("Vasa komanda: %s %s", bash.tipKomande, bash.komanda);
     fprintf(imeFajla, "%s %s", bash.tipKomande, bash.komanda);
@@ -78,7 +78,7 @@ int main()
         case 1:
         {
             FILE *unosniFajl;
-            unosniFajl = fopen("komande.txt", "a+");
+            unosniFajl = fopen("komande.sh", "a+");
             if (unosniFajl == NULL)
             {
                 system("cls");
@@ -130,7 +130,7 @@ int main()
         case 2:
         {
             FILE *fajlZaCitanje;
-            fajlZaCitanje = fopen("komande.txt", "r");
+            fajlZaCitanje = fopen("komande.sh", "r");
             if (fajlZaCitanje == NULL)
             {
                 system("cls");
@@ -149,6 +149,11 @@ int main()
             fclose(fajlZaCitanje);
             system("cls");
             ucitavanjeMenija();
+            break;
+        }
+        case 3:
+        {
+            exit(1);
             break;
         }
 
