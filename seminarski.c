@@ -12,7 +12,7 @@ struct bashKomande
 void ucitavanjeIzboraTipova()
 {
     printf("\n\nIzaberite tip komande:\n");
-    printf("1. SuperUser (sudo)\n2. RegularUser\n\n");
+    printf("1. SuperUser (sudo)\n2. RegularUser\n3. Vrati se na prethodni meni\n\n");
 }
 
 void ucitavanjeMenija() // funkcija za ucitavanje menija
@@ -60,6 +60,7 @@ int main()
 {
     int izborTipa, generalniIzbor;
     bool stanjeMenija = true;
+    char ch;
     bool stanjeMenijaTip = false;
 
     while (stanjeMenija)
@@ -68,16 +69,20 @@ int main()
         ucitavanjeMenija();
         printf("\nVas izbor: ");
         scanf(" %d", &generalniIzbor);
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF)
+            ;
+
         switch (generalniIzbor)
         {
         case 1:
         {
-            FILE *fajlKomandi;
-            fajlKomandi = fopen("komande.txt", "a+");
-            if (fajlKomandi == NULL)
+            FILE *unosniFajl;
+            unosniFajl = fopen("komande.txt", "a+");
+            if (unosniFajl == NULL)
             {
                 system("cls");
-                char *greska = crvenaStampa("\nGreska pri otvaranju datoteke.\nPritisnite taster da bi se vratili na pocetak\n");
+                char *greska = crvenaStampa("\nGreska pri otvaranju datoteke. \n");
                 if (greska != NULL)
                 {
                     printf("%s", greska);
@@ -92,23 +97,23 @@ int main()
                     ucitavanjeIzboraTipova();
                     printf("\nVas izbor: ");
                     scanf(" %d", &izborTipa);
-
+                    while ((c = getchar()) != '\n' && c != EOF)
+                        ;
                     switch (izborTipa)
                     {
                     case 1:
                     {
-                        unosSuperUserKomandi(fajlKomandi);
-                        fclose(fajlKomandi);
-                        stanjeMenijaTip = false;
-                        izborTipa = 0;
+                        unosSuperUserKomandi(unosniFajl);
                         break;
                     }
                     case 2:
                     {
-                        unosUserKomandi(fajlKomandi);
-                        fclose(fajlKomandi);
+                        unosUserKomandi(unosniFajl);
+                        break;
+                    }
+                    case 3:
+                    {
                         stanjeMenijaTip = false;
-                        izborTipa = 0;
                         break;
                     }
                     default:
@@ -117,14 +122,39 @@ int main()
                     }
                     }
                 }
+                fclose(unosniFajl);
             }
             break;
         }
+
+        case 2:
+        {
+            FILE *fajlZaCitanje;
+            fajlZaCitanje = fopen("komande.txt", "r");
+            if (fajlZaCitanje == NULL)
+            {
+                system("cls");
+                char *greska = crvenaStampa("\nGreska pri otvaranju datoteke.\n");
+                if (greska != NULL)
+                {
+                    printf("%s", greska);
+                    free(greska);
+                }
+            }
+            system("cls");
+            while ((ch = fgetc(fajlZaCitanje)) != EOF) // petlja za ucitavanje odnosno ucitavanje karaktera sve dok se ne dodje do kraja fajla
+                printf("%c", ch);
+            printf("\n\nPritisnite enter da bi ste nastavili. \n");
+            getchar();
+            fclose(fajlZaCitanje);
+            system("cls");
+            ucitavanjeMenija();
+            break;
+        }
+
         default:
         {
-            printf("Uneli ste pogresan broj");
-            getchar();
-
+            printf("Unos nije prihvatljiv, pokusajte ponovo.");
             break;
         }
         }
