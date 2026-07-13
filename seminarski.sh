@@ -19,7 +19,7 @@ sed -i 's/main/main contrib non-free non-free-firmware/g' /etc/apt/sources.list
 apt update
 
 echo "==== Instalacija osnovnih paketa ===="
-apt install -y sudo curl wget git neofetch htop build-essential software-properties-common
+apt install -y sudo curl wget git fastfetch htop build-essential software-properties-common
 
 echo "==== Instalacija KDE Plasma ===="
 apt install -y kde-plasma-desktop sddm kde-standard kde-spectacle konsole dolphin okular
